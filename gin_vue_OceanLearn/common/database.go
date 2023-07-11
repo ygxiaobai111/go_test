@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/spf13/viper"
 	"xorm.io/xorm"
 )
 
@@ -16,15 +17,16 @@ var (
 func Sql_conn() (engine *xorm.Engine) {
 	//数据库连接基本信息
 	var (
-		userName  string = "root"
-		password  string = ""
-		ipAddress string = "127.0.0.1"
-		port      int    = 3306
-		dbName    string = "go_test"
-		charset   string = "utf8mb4"
+		userName string = viper.GetString("datasource.username")
+
+		password  string = viper.GetString("datasource.password")
+		ipAddress string = viper.GetString("datasource.host")
+		port      string = viper.GetString("datasource.port")
+		dbName    string = viper.GetString("datasource.database")
+		charset   string = viper.GetString("datasource.charset")
 	)
 	//构建数据库连接信息
-	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s", userName, password, ipAddress, port, dbName, charset)
+	dataSourceName := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", userName, password, ipAddress, port, dbName, charset)
 
 	engine, err := xorm.NewEngine("mysql", dataSourceName)
 	if err != nil {

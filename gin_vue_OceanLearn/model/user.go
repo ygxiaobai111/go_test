@@ -1,5 +1,6 @@
 package model
 
+//用户表
 type Go_gin_User struct {
 	Id        int
 	Name      string `xorm:"varchar(20)"`

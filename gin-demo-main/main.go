@@ -1,47 +1,34 @@
 package main
 
 import (
-	"os"
-
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/spf13/viper"
-
-	"OceanLearn/common"
-	_ "OceanLearn/model"
+	"jkdev.cn/api/common"
+	"os"
 )
 
 func main() {
-
-	//引入配置文件
 	InitConfig()
-	//数据库连接
-	engine := common.Sql_conn()
-	//当程序结束时关闭数据库连接
-	defer engine.Close()
+	db := common.InitDB()
+	defer db.Close()
 
 	r := gin.Default()
 	r = CollectRoute(r)
 	port := viper.GetString("server.port")
-
 	if port != "" {
 		panic(r.Run(":" + port))
 	}
-
+	panic(r.Run()) // listen and serve on 0.0.0.0:8080
 }
 
-// 连接.yml配置文件
 func InitConfig() {
 	workDir, _ := os.Getwd()
-	//读取文件名
 	viper.SetConfigName("application")
-
 	viper.SetConfigType("yml")
-
 	viper.AddConfigPath(workDir + "/config")
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(err)
+		panic("")
 	}
-
 }
