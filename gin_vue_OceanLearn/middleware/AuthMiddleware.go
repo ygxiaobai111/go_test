@@ -3,6 +3,7 @@ package middleware
 import (
 	"OceanLearn/common"
 	"OceanLearn/model"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -14,6 +15,8 @@ func AuthMiddleware() gin.HandlerFunc {
 		//获取authorization header
 
 		tokenString := ctx.GetHeader("Authorization")
+
+		fmt.Println("token:", tokenString)
 		if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer") {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Error Page</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .error-container {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 20px;
+            width: 400px;
+            margin: 0 auto; /* 居中显示 */
+        }
+
+        .error-message {
+            color: #091fe7;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #009933;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+        } 
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Information printing</h1>
+        <p class="error-message">code：{{.code}}</p>
+        <p>msg：{{.user.name}}</p>
+        <a href="/index" class="home-button">Return to Home</a>
+    </div>
+
+    <script>
+        // 点击按钮时执行跳转到主页
+        document.querySelector('.home-button').addEventListener('click', function() {
+            window.location.href = '/index';
+        });
+    </script>
+</body>
+</html>

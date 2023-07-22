@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>字典</title>
+ <!-- 引入外部脚本文件 -->
+ <script src="/static/js/common.js"></script>
+  <style>
+    #inputText,
+    #outputText {
+      width: 400px;
+      height: 200px;
+    }
+    
+    .container {
+      display: flex;
+    }
+    
+    .input-container {
+      flex: 1;
+      margin-right: 20px;
+    }
+    
+    .output-container {
+      flex: 1;
+    }
+    
+    .output-line {
+      white-space: pre;
+    }
+    .en-us {
+    color: blue;
+  }
+  .en {
+    color: green;
+  }
+  .explanations {
+    color: orange;
+  }
+  .synonym {
+    color: purple;
+  }
+  .antonym {
+    color: red;
+  }
+  </style>
+</head>
+
+<body>
+  <h1>文本框示例</h1>
+
+  <div class="container">
+    <div class="input-container">
+      <label for="inputText">输入：</label>
+      <textarea id="inputText" name="inputText"></textarea>
+      <button onclick="getOutput()">点击获取输出</button>
+    </div>
+    
+    <div class="output-container">
+      <label for="outputText">输出：</label>
+      <div id="outputText"></div>
+      <div id="result-container"></div>
+    </div>
+  </div>
+  
+  <script>
+   fetchBackendData3()
+  </script>
+</body>
+
+</html>

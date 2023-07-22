@@ -6,11 +6,16 @@ import (
 	"OceanLearn/model"
 	"OceanLearn/response"
 	"OceanLearn/util"
+	"context"
+	"fmt"
 	"log"
 	"net/http"
 
+	pb "OceanLearn/proto"
+
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+
 	"xorm.io/xorm"
 )
 
@@ -27,6 +32,35 @@ func isTelephoneExist(engine *xorm.Engine, telephone string) bool {
 	return false
 }
 
+// 首页
+func Index(ctx *gin.Context) {
+	ctx.HTML(200, "index.html", gin.H{
+		"msg":  "后台消息",
+		"name": "标题是这样的",
+	})
+}
+
+// 注册页面
+func RegPage(ctx *gin.Context) {
+	ctx.HTML(200, "register.html", gin.H{
+		"msg": "后台消息",
+	})
+}
+
+// 登录页面
+func LogPage(ctx *gin.Context) {
+	ctx.HTML(200, "login.html", gin.H{
+		"msg": "后台消息",
+	})
+}
+
+func DictPage(ctx *gin.Context) {
+	ctx.HTML(200, "dict.html", gin.H{
+		"msg": "后台消息",
+	})
+}
+
+// 注册
 func Register(ctx *gin.Context) {
 	engine := common.GetEngine()
 	//获取前端返回参数
@@ -77,8 +111,11 @@ func Register(ctx *gin.Context) {
 		Password:  string(hasedPassword),
 	}
 	// 向数据库插入数据
-	engine.Insert(&newUser)
-
+	_, err = engine.Insert(&newUser)
+	if err != nil {
+		response.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "数据插入失败")
+		return
+	}
 	//返回结果
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": 200,
@@ -95,7 +132,7 @@ func Login(ctx *gin.Context) {
 	telephone := ctx.PostForm("telephone")
 
 	password := ctx.PostForm("password")
-
+	fmt.Println(telephone)
 	//数据验证
 
 	if len(telephone) != 11 {
@@ -137,9 +174,33 @@ func Login(ctx *gin.Context) {
 
 	//返回结果
 	response.Success(ctx, gin.H{"token": token}, "登陆成功")
+
+}
+
+func Dict(ctx *gin.Context) {
+	//数据库连接
+	// engine := common.GetEngine()
+	//获取前端返回参数
+
+	inputText := ctx.PostForm("inputText")
+	fmt.Println(inputText)
+	conn := common.Grpc_conn()
+
+	defer conn.Close()
+
+	client := pb.NewSayDictClient(conn)
+
+	resp, _ := client.SayDict(context.Background(), &pb.DictRequest{TransType: "en2zh", Source: inputText})
+	data := dto.ToDictDto(resp)
+	fmt.Println(resp.Dictionary)
+	response.Success(ctx, gin.H{"data": data}, "返回成功")
+	fmt.Println(data.Dictionary)
+
 }
 
 func Info(ctx *gin.Context) {
+
+	fmt.Println("ok")
 	user, _ := ctx.Get("user")
 	ctx.JSON(http.StatusOK, gin.H{
 		"code": 200,

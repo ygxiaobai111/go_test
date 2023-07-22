@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+
+option go_package = ".;service";
+
+service SayDict {
+    rpc SayDict(DictRequest) returns (DictResponse){}
+}
+
+message DictResponse {
+    int32 rc = 1;
+    message Wiki {
+    }
+
+    message Dictionary {
+        message Prons {
+        string en_us = 1;
+        string en = 2;
+    }
+        Prons prons=1;
+        repeated string explanations = 2;
+        repeated string synonym = 3;
+        repeated string antonym = 4;
+        message Example {
+            repeated string example_strings = 1;
+    }
+
+        repeated Example wqx_example = 6;
+
+
+        string entry = 7;
+        string type = 8;
+        repeated string related =9;
+        string source = 10;
+}
+Dictionary dictionary=2;
+}
+
+message DictRequest {
+    string  trans_type =1;
+    string  source=2;
+    string user_id=3;
+}

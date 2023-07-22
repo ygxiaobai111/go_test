@@ -1,6 +1,7 @@
 server:
   port: 8234
 
+
 datasource:
   driverName: mysql
   host: 127.0.0.1
